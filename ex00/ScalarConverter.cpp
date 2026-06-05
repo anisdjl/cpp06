@@ -20,3 +20,11 @@ ScalarConverter &ScalarConverter::operator=(const ScalarConverter &src) {
     }
     return *this;
 }
+
+void	ScalarConverter::convert(std::string input)
+{
+	// je dois chekcer si c'est pas un char bizzare, non affichable
+	// je dois trouver le type de base 
+	// ensuite je dois checker ses limites pour tout ce qui est overflow
+	// ensuite je cast
+}
