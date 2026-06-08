@@ -27,4 +27,42 @@ void	ScalarConverter::convert(std::string input)
 	// je dois trouver le type de base 
 	// ensuite je dois checker ses limites pour tout ce qui est overflow
 	// ensuite je cast
+
+	displayAsChar(input);
+	displayAsInt(input);
+	displayAsFloat(input);
+	displayAsDouble(input);
+}
+
+void	displayAsChar(std::string input)
+{
+	double	number;
+	char	*end;
+
+	number = std::strtod(input.c_str(), &end);
+	if (number != number || number < 0 || number > 127) // number != number c'est pour le nan
+	{
+		std::cout << "Char: impossible\n";
+		return ;
+	}
+	else
+	{
+		std::cout << "Char: " << static_cast<char>(number) << std::endl;
+		return ;
+	}
+}
+
+void	displayAsInt(std::string input)
+{
+
+}
+
+void	displayAsFloat(std::string input)
+{
+
+}
+
+void	displayAsDouble(std::string input)
+{
+
 }
