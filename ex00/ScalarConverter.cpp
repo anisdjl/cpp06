@@ -145,10 +145,11 @@ void	displayAsDouble(std::string input)
 		std::cout << "double: impossible" << std::endl;
 		return ;
 	}
-	if (num == std::floor(num) && num < 1000000)
-		std::cout << std::fixed << std::setprecision(1);
-	else
-		std::cout << std::setprecision(6);
-	std::cout << "double: " << static_cast<double>(num) << std::endl;
+	if (num == static_cast<long>(num))
+        std::cout << std::setprecision(1);
+    else
+        std::cout << std::setprecision(5);
+
+    std::cout << "double: " << static_cast<double>(num) << std::endl;
 	return ;
 }

@@ -10,6 +10,7 @@
 #include <cstdlib> // pour strtod
 #include <cctype> // pour le isdigit isnum isprint
 #include <iomanip>
+#include <fstream>
 
 class ScalarConverter {
     private:
