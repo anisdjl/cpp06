@@ -9,6 +9,7 @@
 #include <cfloat> // pour les limtes de floats
 #include <cstdlib> // pour strtod
 #include <cctype> // pour le isdigit isnum isprint
+#include <iomanip>
 
 class ScalarConverter {
     private:

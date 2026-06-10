@@ -2,6 +2,7 @@ CXX = c++
 CXXFLAGS = -Wall -Werror -Wextra -std=c++98
 NAME = a.out
 SRC = main.cpp \
+	  Serializer.cpp
 	  
 OBJ = $(SRC:.cpp=.o)
 

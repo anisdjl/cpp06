@@ -4,7 +4,7 @@ int main(int argc, char *argv[])
 {
 	if (argc != 2)
 	{
-		std::cout << "Wrong number of input, try with this format : ./convert '...'";
+		std::cerr << "Wrong number of input, try with this format : ./convert '...'" << std::endl;
 		return (0);
 	}
 
