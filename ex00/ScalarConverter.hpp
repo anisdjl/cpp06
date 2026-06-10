@@ -2,6 +2,7 @@
 #define SCALARCONVERTER_HPP
 
 #include <iostream>
+#include <limits>
 #include <climits> // pour les limtes de int
 #include <string> // .find() .find_last_of() .find_first_of()
 #include <cmath> // pour les autres limites
