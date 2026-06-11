@@ -23,22 +23,10 @@ ScalarConverter &ScalarConverter::operator=(const ScalarConverter &src) {
 
 void	ScalarConverter::convert(std::string input)
 {
-	if (input == "nan" || input == "nanf" || input == "inf" || input == "inff" || input == "-inf" || input == "-inff")
+	if (input.empty())
 	{
-		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: impossible" << std::endl;
-		
-		if (input.find('f') != std::string::npos || input == "nanf")
-		{
-			std::cout << "float: " << (input == "nanf" ? "nanf" : input) << std::endl; // un soucis ici avec le inf et -inf
-			std::cout << "double: " << (input == "nanf" ? "nan" : input.substr(0, input.length() - 1)) << std::endl;
-		}
-		else {
-			std::string sign = (input[0] == '-') ? "-" : "";
-			std::cout << "float: " << sign << "inff" << std::endl;
-			std::cout << "double: " << sign << "inf" << std::endl;
-		}
-		return;
+		std::cout << "char: impossible\nint: impossible\nfloat: impossible\ndouble: impossible" << std::endl;
+		return ;
 	}
 	displayAsChar(input);
 	displayAsInt(input);
@@ -48,23 +36,29 @@ void	ScalarConverter::convert(std::string input)
 
 void	displayAsChar(std::string input)
 {
+	if (input.length() == 1 && std::isprint(input[0]) && !std::isdigit(input[0]))
+	{
+		std::cout << "char: '" << input[0] << "'" << std::endl;
+		return ;
+	}
+	
 	double	num;
 	char	*end;
 
 	num = std::strtod(input.c_str(), &end);
-	if (input.length() == 1 && !std::isdigit(input[0]))
+	if (*end != '\0' && !(*end == 'f' && *(end + 1) == '\0')) // si il a une fin et que ce n'est pas un f c'est impossible
 	{
-		std::cout << "char: " << static_cast<char>(input[0]) << std::endl;
+		std::cout << "char: impossible" << std::endl;
 		return ;
 	}
-	if (num != num || num < 0 || num > 127) // number != number c'est pour le nan
+	if (num != num || num > 127 || num < 0) // si il est en dehors de la table ascii ou que c'est un nan
 	{
-		std::cout << "char: impossible\n";
+		std::cout << "char: impossible" << std::endl;
 		return ;
 	}
-	else if (!isprint(num) || *end)
+	if (!std::isprint(static_cast<int>(num))) // si il est pas prinatble
 	{
-		std::cout << "char: Non displayable\n";
+		std::cout << "char: non displayable" << std::endl;
 		return ;
 	}
 	else
@@ -76,80 +70,122 @@ void	displayAsChar(std::string input)
 
 void	displayAsInt(std::string input)
 {
-	double	num;
-	char	*end;
-
-	num = std::strtod(input.c_str(), &end);
-	if (input.length() == 1 && !std::isdigit(input[0]))
+	if (input.length() == 1 && std::isprint(input[0]) && !std::isdigit(input[0]))
 	{
 		std::cout << "int: " << static_cast<int>(input[0]) << std::endl;
 		return ;
 	}
-	if (num != num || input == "nan" || input == "nanf" || input == "+inf" || input == "+inff" || input == "-inf" || input == "-inff" || num > INT_MAX || num < INT_MIN || !std::isdigit(input[0]))
+
+	double	num;
+	char	*end;
+
+	num = std::strtod(input.c_str(), &end);
+	if (*end != '\0' && !(*end == 'f' && *(end + 1) == '\0')) // si il a une fin et que ce n'est pas un f c'est impossible
 	{
 		std::cout << "int: impossible" << std::endl;
 		return ;
 	}
-	else
+	if (num!= num || num > INT_MAX || num < INT_MIN)
 	{
-		std::cout << "int: " << static_cast<int>(num) << std::endl;
+		std::cout << "int: impossible" << std::endl;
 		return ;
 	}
+	std::cout << "int: " << static_cast<int>(num) << std::endl;
+	return ;
 }
 
 void	displayAsFloat(std::string input)
 {
+	if (input.length() == 1 && std::isprint(input[0]) && !std::isdigit(input[0]))
+	{
+		std::cout << "float: " << static_cast<float>(input[0]) << ".0f" << std::endl;
+		return ;
+	}
+
 	double	num;
 	char	*end;
 
 	num = std::strtod(input.c_str(), &end);
-	if (input.length() == 1 && !std::isdigit(input[0]))
-	{
-		std::cout << "float: " << static_cast<float>(input[0]) << "f" << std::endl;
-		return ;
-	}
-	if (input.find('.') != std::string::npos)
-	{
-		if (!(*end == 'f' && *(end + 1) == '\0'))
-		{
-			std::cout << "float: impossible" << std::endl;
-			return ;
-		}
-	}
-	if (num > std::numeric_limits<float>::max() || num < std::numeric_limits<float>::min())
+	if (*end != '\0' && !(*end == 'f' && *(end + 1) == '\0')) // si il a une fin et que ce n'est pas un f c'est impossible
 	{
 		std::cout << "float: impossible" << std::endl;
 		return ;
 	}
-	if (num == std::floor(num) && num < 1000000)
-		std::cout << std::fixed << std::setprecision(1);
-	else
-		std::cout << std::setprecision(6);
-	std::cout << "float: " << static_cast<float>(num) << "f" << std::endl;
-	return ;
+	if (num!= num)
+	{
+		std::cout << "float: nanf" << std::endl;
+		return ;
+	}
+	if (num == std::numeric_limits<double>::infinity())
+	{
+		std::cout << "float: inff" << std::endl;
+		return ;
+	}
+	if (num == -std::numeric_limits<double>::infinity())
+	{
+		std::cout << "float: -inff" << std::endl;
+		return ;
+	}
+	if (num > std::numeric_limits<float>::max() || num < -std::numeric_limits<float>::max())
+	{
+		std::cout << "float: impossible" << std::endl;
+		return;
+	}
+	if (num == static_cast<long>(num))
+    {
+        std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(num) << "f" << std::endl;
+        std::cout.unsetf(std::ios::fixed); // On reset le flux pour la suite
+    }
+    else
+    {
+        std::cout << "float: " << static_cast<float>(num) << "f" << std::endl;
+    }
 }
 
 void	displayAsDouble(std::string input)
 {
+	if (input.length() == 1 && std::isprint(input[0]) && !std::isdigit(input[0]))
+	{
+		std::cout << "double: " << static_cast<double>(input[0]) << ".0" << std::endl;
+		return ;
+	}
+
 	double	num;
 	char	*end;
 
 	num = std::strtod(input.c_str(), &end);
-	if (input.length() == 1 && !std::isdigit(input[0]))
-	{
-		std::cout << "double: " << static_cast<double>(input[0]) << std::endl;
-		return ;
-	}
-	if (num > std::numeric_limits<double>::max() || num < std::numeric_limits<double>::min())
+	if (*end != '\0' && !(*end == 'f' && *(end + 1) == '\0')) // si il a une fin et que ce n'est pas un f c'est impossible
 	{
 		std::cout << "double: impossible" << std::endl;
 		return ;
 	}
+	if (num!= num)
+	{
+		std::cout << "double: nan" << std::endl;
+		return ;
+	}
+	if (num == std::numeric_limits<double>::infinity())
+	{
+		std::cout << "double: inf" << std::endl;
+		return ;
+	}
+	if (num == -std::numeric_limits<double>::infinity())
+	{
+		std::cout << "double: -inf" << std::endl;
+		return ;
+	}
+	if (num > std::numeric_limits<double>::max() || num < -std::numeric_limits<double>::max())
+	{
+		std::cout << "double: impossible" << std::endl;
+		return;
+	}
 	if (num == static_cast<long>(num))
-        std::cout << std::setprecision(1);
+    {
+        std::cout << "double: " << std::fixed << std::setprecision(1) << static_cast<double>(num) << std::endl;
+        std::cout.unsetf(std::ios::fixed); // On reset le flux pour la suite
+    }
     else
-        std::cout << std::setprecision(5);
-
-    std::cout << "double: " << static_cast<double>(num) << std::endl;
-	return ;
+    {
+        std::cout << "double: " << static_cast<double>(num) << std::endl;
+    }
 }
