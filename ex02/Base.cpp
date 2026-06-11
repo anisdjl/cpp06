@@ -9,7 +9,6 @@ Base::~Base() {
 
 Base *generate(void)
 {
-	srand(time(0));
 	int random_num;
 
 	random_num = rand() % 3;
